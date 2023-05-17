@@ -89,9 +89,9 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 	r.Use(recoverer)
 	r.UseBypass(tracer)
 
-	r.Get("/health", api.HealthCheck)
+	r.Get("/api/health", api.HealthCheck)
 
-	r.Route("/callback", func(r *router) {
+	r.Route("/api/callback", func(r *router) {
 		r.UseBypass(logger)
 		r.Use(api.loadOAuthState)
 
@@ -101,7 +101,7 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 		r.Get("/", api.ExternalProviderCallback)
 	})
 
-	r.Route("/", func(r *router) {
+	r.Route("/api", func(r *router) {
 		r.UseBypass(logger)
 
 		if globalConfig.MultiInstanceMode {
@@ -167,7 +167,7 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 	if globalConfig.MultiInstanceMode {
 		// Operator microservice API
 		r.WithBypass(logger).With(api.verifyOperatorRequest).Get("/", api.GetAppManifest)
-		r.Route("/instances", func(r *router) {
+		r.Route("/api/instances", func(r *router) {
 			r.UseBypass(logger)
 			r.Use(api.verifyOperatorRequest)
 
