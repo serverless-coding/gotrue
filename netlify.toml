@@ -1,9 +1,12 @@
 [build]
+  command = "./build.sh"
+  functions = "functions"
   publish = "www"
-  command = "exit 0"
+
+[build.environment]
+  GO111MODULE = "on"
 
 [[redirects]]
-from = "/*"
-to = "https://github.com/netlify/gotrue"
-status = 302
-force = true
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
