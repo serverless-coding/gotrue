@@ -1,10 +1,11 @@
 package storage
 
 import (
+	"crypto/tls"
 	"net/url"
 
 	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/mysql"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/pop/v5/columns"
 	"github.com/netlify/gotrue/conf"
@@ -27,7 +28,15 @@ func Dial(config *conf.GlobalConfiguration) (*Connection, error) {
 		}
 		config.DB.Driver = u.Scheme
 	}
-
+	if config.DB.Tls.Key != "" {
+		err := mysql.RegisterTLSConfig(config.DB.Tls.Key, &tls.Config{
+			MinVersion: config.DB.Tls.MinVersion, // tls.VersionTLS12,
+			ServerName: config.DB.Tls.ServerName,
+		})
+		if err != nil {
+			logrus.Fatalf("%+v", errors.Wrap(err, "register database tls config"))
+		}
+	}
 	db, err := pop.NewConnection(&pop.ConnectionDetails{
 		Dialect: config.DB.Driver,
 		URL:     config.DB.URL,

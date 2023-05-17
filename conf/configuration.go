@@ -35,10 +35,17 @@ type SamlProviderConfiguration struct {
 
 // DBConfiguration holds all the database related configuration.
 type DBConfiguration struct {
-	Driver         string `json:"driver" required:"true"`
-	URL            string `json:"url" envconfig:"DATABASE_URL" required:"true"`
-	Namespace      string `json:"namespace"`
-	MigrationsPath string `json:"migrations_path" split_words:"true" default:"./migrations"`
+	Driver         string             `json:"driver" required:"true"`
+	URL            string             `json:"url" envconfig:"DATABASE_URL" required:"true"`
+	Namespace      string             `json:"namespace"`
+	MigrationsPath string             `json:"migrations_path" split_words:"true" default:"./migrations"`
+	Tls            DBTlsConfiguration `json:"tls"`
+}
+
+type DBTlsConfiguration struct {
+	Key        string `json:"key" envconfig:"TLS_KEY"`
+	MinVersion uint16 `json:"min_version,omitempty" envconfig:"TLS_MIN_VERSION"`
+	ServerName string `json:"server_name,omitempty" envconfig:"TLS_SERVER_NAME"`
 }
 
 // JWTConfiguration holds all the JWT related configuration.

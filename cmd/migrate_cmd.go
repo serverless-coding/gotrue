@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"crypto/tls"
 	"net/url"
 	"os"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/netlify/gotrue/conf"
 	"github.com/pkg/errors"
@@ -40,7 +42,15 @@ func migrate(cmd *cobra.Command, args []string) {
 			"Namespace": globalConfig.DB.Namespace + "_",
 		}
 	}
-
+	if globalConfig.DB.Tls.Key != "" {
+		err = mysql.RegisterTLSConfig(globalConfig.DB.Tls.Key, &tls.Config{
+			MinVersion: globalConfig.DB.Tls.MinVersion, // tls.VersionTLS12,
+			ServerName: globalConfig.DB.Tls.ServerName,
+		})
+		if err != nil {
+			logrus.Fatalf("%+v", errors.Wrap(err, "register database tls config"))
+		}
+	}
 	db, err := pop.NewConnection(deets)
 	if err != nil {
 		logrus.Fatalf("%+v", errors.Wrap(err, "opening db connection"))
