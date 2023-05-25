@@ -10,5 +10,5 @@ www/node_modules
 npm-debug.log
 .data
 
-functions/
+./functions/
 gotrue*
