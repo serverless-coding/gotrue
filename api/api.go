@@ -192,6 +192,51 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 	return api
 }
 
+func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration, db *storage.Connection, version string) *API {
+	api := &API{config: globalConfig, db: db, version: version}
+
+	xffmw, _ := xff.Default()
+	logger := newStructuredLogger(logrus.StandardLogger())
+
+	r := newRouter()
+	r.UseBypass(xffmw.Handler)
+	r.Use(addRequestID(globalConfig))
+	r.Use(recoverer)
+	r.UseBypass(tracer)
+
+	r.Route("/api", func(r *router) {
+		r.UseBypass(logger)
+
+		if globalConfig.MultiInstanceMode {
+			r.Use(api.loadJWSSignatureHeader)
+			r.Use(api.loadInstanceConfig)
+		}
+
+		r.Get("/settings", api.Settings)
+		r.Get("/authorize", api.ExternalProviderRedirect)
+		r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
+
+		r.With(api.requireEmailProvider).Post("/signup", api.Signup)
+		r.With(api.requireEmailProvider).Post("/recover", api.Recover)
+		r.With(api.requireEmailProvider).With(api.limitHandler(
+			// Allow requests at a rate of 30 per 5 minutes.
+			tollbooth.NewLimiter(30.0/(60*5), &limiter.ExpirableOptions{
+				DefaultExpirationTTL: time.Hour,
+			}).SetBurst(30),
+		)).Post("/token", api.Token)
+		r.Post("/verify", api.Verify)
+
+		r.With(api.requireAuthentication).Post("/logout", api.Logout)
+	})
+	corsHandler := cors.New(cors.Options{
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", audHeaderName, useCookieHeader},
+		AllowCredentials: true,
+	})
+	api.handler = corsHandler.Handler(chi.ServerBaseContext(ctx, r))
+	return api
+}
+
 // NewAPIFromConfigFile creates a new REST API using the provided configuration file.
 func NewAPIFromConfigFile(filename string, version string) (*API, *conf.Configuration, error) {
 	globalConfig, err := conf.LoadGlobal(filename)
