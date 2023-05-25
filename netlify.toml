@@ -22,9 +22,8 @@
   # a base hasn’t been set.
   path = "functions/register"
   name = "register"
-  directory = "functions/register"
+  #directory = "functions/register" 只能在functions下配置
 
 [functions.settings]
   path = "functions/settings"
   name = "settings"
-  directory = "functions/settings"
