@@ -2,6 +2,7 @@ module github.com/netlify/gotrue
 
 require (
 	github.com/GoogleCloudPlatform/cloudsql-proxy v1.27.0
+	github.com/apex/gateway v1.1.2
 	github.com/badoux/checkmail v0.0.0-20170203135005-d0a759655d62
 	github.com/beevik/etree v1.1.1-0.20200718192613-4a2f8b9d084c
 	github.com/didip/tollbooth/v5 v5.1.1
