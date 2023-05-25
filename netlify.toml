@@ -11,14 +11,20 @@
   to = "/.netlify/functions/register/:splat"
   status = 200
 
-[[functions]]
+[functions]
+  # Sets a custom directory for Netlify Functions
+  directory = "functions/"
+
+[functions.register]
   # Directory with serverless functions, including background
   # functions, to deploy. This is relative to the base directory
   # if one has been set, or the root directory if
   # a base hasn’t been set.
   path = "functions/register"
   name = "register"
+  directory = "functions/register"
 
-[[functions]]
+[functions.settings]
   path = "functions/settings"
   name = "settings"
+  directory = "functions/settings"
