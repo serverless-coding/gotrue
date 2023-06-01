@@ -21,6 +21,10 @@ func (r *router) Route(pattern string, fn func(*router)) {
 	})
 }
 
+func (r *router) GetRoute() *chi.Router {
+	return &r.chi
+}
+
 func (r *router) Get(pattern string, fn apiHandler) {
 	r.chi.Get(pattern, handler(fn))
 }

@@ -20,7 +20,7 @@ type SignupParams struct {
 
 // Signup is the endpoint for registering a new user
 func (a *API) Signup(w http.ResponseWriter, r *http.Request) error {
-	ctx := r.Context()
+	ctx := a.Cx // r.Context()
 	config := a.getConfig(ctx)
 
 	if config.DisableSignup {

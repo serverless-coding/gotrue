@@ -39,7 +39,7 @@ func main() {
 	defer db.Close()
 
 	globalConfig.MultiInstanceMode = true
-	api := api.NewRegisterAPI(context.Background(), globalConfig, db, cmd.Version)
+	_, api := api.NewRegisterAPI(context.Background(), globalConfig, db, cmd.Version)
 
 	l := fmt.Sprintf("%v:%v", globalConfig.API.Host, globalConfig.API.Port)
 	logrus.Infof("GoTrue API started on: %s", l)

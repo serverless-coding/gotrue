@@ -31,6 +31,7 @@ var bearerRegexp = regexp.MustCompile(`^(?:B|b)earer (\S+$)`)
 
 // API is the main REST API
 type API struct {
+	Cx      context.Context
 	handler http.Handler
 	db      *storage.Connection
 	config  *conf.GlobalConfiguration
@@ -109,7 +110,7 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 			r.Use(api.loadInstanceConfig)
 		}
 
-		r.Get("/settings", api.Settings)
+		//	r.Get("/settings", api.Settings)
 
 		r.Get("/authorize", api.ExternalProviderRedirect)
 
@@ -196,7 +197,8 @@ func NewEmptyApi(ctx context.Context, globalConfig *conf.GlobalConfiguration, db
 	return &API{config: globalConfig, db: db, version: version}
 }
 
-func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration, db *storage.Connection, version string) *API {
+func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration, db *storage.Connection, version string) (
+	*chi.Router, *API) {
 	api := &API{config: globalConfig, db: db, version: version}
 
 	xffmw, _ := xff.Default()
@@ -216,7 +218,7 @@ func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration,
 			r.Use(api.loadInstanceConfig)
 		}
 
-		r.Get("/settings", api.Settings)
+		// r.Get("/settings", api.Settings)
 		r.Get("/authorize", api.ExternalProviderRedirect)
 		r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
 
@@ -238,7 +240,7 @@ func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration,
 		AllowCredentials: true,
 	})
 	api.handler = corsHandler.Handler(chi.ServerBaseContext(ctx, r))
-	return api
+	return r.GetRoute(), api
 }
 
 // NewAPIFromConfigFile creates a new REST API using the provided configuration file.

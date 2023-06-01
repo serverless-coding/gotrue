@@ -10,5 +10,6 @@ www/node_modules
 npm-debug.log
 .data
 
-functions/
 gotrue*
+# Local Netlify folder
+.netlify
