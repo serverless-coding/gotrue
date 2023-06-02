@@ -3,4 +3,8 @@ go 1.19
 use (
 	.
 	./functions/setting
+	./functions/signup
+	./functions/verify
+	./functions/authorize
+	./functions/token
 )

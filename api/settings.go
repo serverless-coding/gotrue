@@ -2,8 +2,6 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/netlify/gotrue/conf"
 )
 
 type ProviderSettings struct {
@@ -27,7 +25,8 @@ type Settings struct {
 	Autoconfirm       bool             `json:"autoconfirm"`
 }
 
-func (a *API) Settings(w http.ResponseWriter, r *http.Request,config *conf.Configuration ) error {
+func (a *API) Settings(w http.ResponseWriter, r *http.Request) error {
+	config:=a.getConfig(r.Context())
 	return sendJSON(w, http.StatusOK, &Settings{
 		ExternalProviders: ProviderSettings{
 			Bitbucket: config.External.Bitbucket.Enabled,

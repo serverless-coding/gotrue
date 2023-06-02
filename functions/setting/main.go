@@ -18,11 +18,11 @@ import (
 
 var configFile = ""
 
-type hf func(w http.ResponseWriter, r *http.Request, config *conf.Configuration) error
+type hf func(w http.ResponseWriter, r *http.Request) error
 
-func handlerFunc(f hf, config *conf.Configuration) http.HandlerFunc {
+func handlerFunc(f hf) http.HandlerFunc {
 	return func(ww http.ResponseWriter, rr *http.Request) {
-		err := f(ww, rr, config)
+		err := f(ww, rr)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -68,13 +68,12 @@ func start() {
 
 		router, apis := api.NewRegisterAPI(ctx, globalConfig, db, cmd.Version)
 		fmt.Println("-----router:", router)
-		apis.Cx = ctx
-		adapter := httpadapter.New(handlerFunc(apis.Settings,config))
+		apis.CtxConfig = config
+		adapter := httpadapter.New(handlerFunc(apis.Settings))
 		resp, err = adapter.Proxy(req)
 		resp.StatusCode = 200
 		return
 	})
-	//lambda.Start(handler)
 }
 
 // npm install netlify-cli -g

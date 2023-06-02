@@ -9,8 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/didip/tollbooth/v5"
-	"github.com/didip/tollbooth/v5/limiter"
 	"github.com/go-chi/chi"
 	"github.com/gobuffalo/uuid"
 	"github.com/imdario/mergo"
@@ -31,11 +29,11 @@ var bearerRegexp = regexp.MustCompile(`^(?:B|b)earer (\S+$)`)
 
 // API is the main REST API
 type API struct {
-	Cx      context.Context
-	handler http.Handler
-	db      *storage.Connection
-	config  *conf.GlobalConfiguration
-	version string
+	CtxConfig *conf.Configuration
+	handler   http.Handler
+	db        *storage.Connection
+	config    *conf.GlobalConfiguration
+	version   string
 }
 
 // ListenAndServe starts the REST API
@@ -105,26 +103,26 @@ func NewAPIWithVersion(ctx context.Context, globalConfig *conf.GlobalConfigurati
 	r.Route("/api", func(r *router) {
 		r.UseBypass(logger)
 
-		if globalConfig.MultiInstanceMode {
-			r.Use(api.loadJWSSignatureHeader)
-			r.Use(api.loadInstanceConfig)
-		}
+		// if globalConfig.MultiInstanceMode {
+		// 	r.Use(api.loadJWSSignatureHeader)
+		// 	r.Use(api.loadInstanceConfig)
+		// }
 
-		//	r.Get("/settings", api.Settings)
+		// //	r.Get("/settings", api.Settings)
 
-		r.Get("/authorize", api.ExternalProviderRedirect)
+		// r.Get("/authorize", api.ExternalProviderRedirect)
 
-		r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
+		// r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
 
-		r.With(api.requireEmailProvider).Post("/signup", api.Signup)
-		r.With(api.requireEmailProvider).Post("/recover", api.Recover)
-		r.With(api.requireEmailProvider).With(api.limitHandler(
-			// Allow requests at a rate of 30 per 5 minutes.
-			tollbooth.NewLimiter(30.0/(60*5), &limiter.ExpirableOptions{
-				DefaultExpirationTTL: time.Hour,
-			}).SetBurst(30),
-		)).Post("/token", api.Token)
-		r.Post("/verify", api.Verify)
+		// r.With(api.requireEmailProvider).Post("/signup", api.Signup)
+		// r.With(api.requireEmailProvider).Post("/recover", api.Recover)
+		// r.With(api.requireEmailProvider).With(api.limitHandler(
+		// 	// Allow requests at a rate of 30 per 5 minutes.
+		// 	tollbooth.NewLimiter(30.0/(60*5), &limiter.ExpirableOptions{
+		// 		DefaultExpirationTTL: time.Hour,
+		// 	}).SetBurst(30),
+		// )).Post("/token", api.Token)
+		// r.Post("/verify", api.Verify)
 
 		r.With(api.requireAuthentication).Post("/logout", api.Logout)
 
@@ -213,24 +211,24 @@ func NewRegisterAPI(ctx context.Context, globalConfig *conf.GlobalConfiguration,
 	r.Route("/api", func(r *router) {
 		r.UseBypass(logger)
 
-		if globalConfig.MultiInstanceMode {
-			r.Use(api.loadJWSSignatureHeader)
-			r.Use(api.loadInstanceConfig)
-		}
+		// if globalConfig.MultiInstanceMode {
+		// 	r.Use(api.loadJWSSignatureHeader)
+		// 	r.Use(api.loadInstanceConfig)
+		// }
 
-		// r.Get("/settings", api.Settings)
-		r.Get("/authorize", api.ExternalProviderRedirect)
-		r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
+		// // r.Get("/settings", api.Settings)
+		// r.Get("/authorize", api.ExternalProviderRedirect)
+		// r.With(api.requireAdminCredentials).Post("/invite", api.Invite)
 
-		r.With(api.requireEmailProvider).Post("/signup", api.Signup)
+		// r.With(api.requireEmailProvider).Post("/signup", api.Signup)
 		r.With(api.requireEmailProvider).Post("/recover", api.Recover)
-		r.With(api.requireEmailProvider).With(api.limitHandler(
-			// Allow requests at a rate of 30 per 5 minutes.
-			tollbooth.NewLimiter(30.0/(60*5), &limiter.ExpirableOptions{
-				DefaultExpirationTTL: time.Hour,
-			}).SetBurst(30),
-		)).Post("/token", api.Token)
-		r.Post("/verify", api.Verify)
+		// r.With(api.requireEmailProvider).With(api.limitHandler(
+		// 	// Allow requests at a rate of 30 per 5 minutes.
+		// 	tollbooth.NewLimiter(30.0/(60*5), &limiter.ExpirableOptions{
+		// 		DefaultExpirationTTL: time.Hour,
+		// 	}).SetBurst(30),
+		// )).Post("/token", api.Token)
+		// r.Post("/verify", api.Verify)
 
 		r.With(api.requireAuthentication).Post("/logout", api.Logout)
 	})
@@ -288,12 +286,7 @@ func (a *API) Mailer(ctx context.Context) mailer.Mailer {
 }
 
 func (a *API) getConfig(ctx context.Context) *conf.Configuration {
-	obj := ctx.Value(configKey)
-	if obj == nil {
-		return nil
-	}
-
-	config := obj.(*conf.Configuration)
+	config := a.CtxConfig
 
 	extConfig := (*a.config).External
 	if err := mergo.MergeWithOverwrite(&extConfig, config.External); err != nil {
