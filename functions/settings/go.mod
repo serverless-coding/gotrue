@@ -1,4 +1,4 @@
-module github.com/someone/setting
+module github.com/someone/settings
 
 go 1.19
 
