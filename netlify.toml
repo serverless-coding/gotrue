@@ -7,8 +7,8 @@
   GO111MODULE = "on"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/register/:splat"
+  from = "/*"
+  to = "/.netlify/functions/:splat"
   status = 200
 
 [functions]

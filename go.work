@@ -3,6 +3,7 @@ go 1.19
 use (
 	.
 	./functions/setting
+	./functions/settings
 	./functions/signup
 	./functions/verify
 	./functions/authorize
