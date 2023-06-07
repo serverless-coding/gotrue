@@ -1,6 +1,8 @@
 package api
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type ProviderSettings struct {
 	Bitbucket bool `json:"bitbucket"`
@@ -24,8 +26,7 @@ type Settings struct {
 }
 
 func (a *API) Settings(w http.ResponseWriter, r *http.Request) error {
-	config := a.getConfig(r.Context())
-
+	config:=a.getConfig(r.Context())
 	return sendJSON(w, http.StatusOK, &Settings{
 		ExternalProviders: ProviderSettings{
 			Bitbucket: config.External.Bitbucket.Enabled,

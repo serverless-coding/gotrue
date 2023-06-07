@@ -537,3 +537,6 @@ GoTrue exposes the following endpoints:
 ## TODO
 
 * Schema for custom user data in config file
+
+
+curl -X POST "http://localhost:8888/.netlify/functions/signup" -d "{\"email\": \"email@example.com\",\"password\": \"secret\"}"
