@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/uuid"
 	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/netlify/gotrue/api/provider"
-	"github.com/netlify/gotrue/conf"
 	"github.com/netlify/gotrue/models"
 	"github.com/netlify/gotrue/storage"
 	"github.com/sirupsen/logrus"
@@ -31,9 +30,9 @@ type ExternalSignupParams struct {
 	Code     string `json:"code"`
 }
 
-func (a *API) ExternalProviderRedirect(w http.ResponseWriter, r *http.Request, config *conf.Configuration) error {
+func (a *API) ExternalProviderRedirect(w http.ResponseWriter, r *http.Request) error {
 	ctx := r.Context()
-
+	config := a.CtxConfig
 	providerType := r.URL.Query().Get("provider")
 	provider, err := a.Provider(ctx, providerType)
 	if err != nil {

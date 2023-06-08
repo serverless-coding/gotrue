@@ -67,7 +67,7 @@ func start() {
 		router, apis := api.NewRegisterAPI(ctx, globalConfig, db, cmd.Version)
 		fmt.Println("-----router:", router)
 		apis.CtxConfig = config
-		adapter := httpadapter.New(handlerFunc(apis.ExternalProviderRedirect))
+		adapter := httpadapter.New(handlerFunc(apis.UserGet))
 		resp, err = adapter.Proxy(req)
 		resp.StatusCode = 200
 		return
