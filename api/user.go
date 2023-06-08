@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gobuffalo/uuid"
 	"github.com/netlify/gotrue/models"
 	"github.com/netlify/gotrue/storage"
-	"github.com/gobuffalo/uuid"
 )
 
 // UserUpdateParams parameters for updating a user
@@ -20,7 +20,12 @@ type UserUpdateParams struct {
 
 // UserGet returns a user
 func (a *API) UserGet(w http.ResponseWriter, r *http.Request) error {
-	ctx := r.Context()
+	// TODO:
+	contextFromReq, err := a.requireAuthentication(w, r)
+	if err != nil {
+		return badRequestError("Could not read claims")
+	}
+	ctx := contextFromReq
 	claims := getClaims(ctx)
 	if claims == nil {
 		return badRequestError("Could not read claims")
