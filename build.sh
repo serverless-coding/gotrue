@@ -5,7 +5,7 @@ PATH_PROJECT=$(pwd)
 mkdir -p "$(pwd)/functions"
 
 # 定义一个字符串数组
-paths=("functions/authorize" "functions/signup" "functions/setting" "functions/settings" "functions/token" "functions/verify")
+paths=("functions/authorize" "functions/signup" "functions/setting" "functions/settings" "functions/token" "functions/verify" "functions/user")
 
 # 遍历数组并输出每个元素
 for api in "${paths[@]}"
