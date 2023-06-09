@@ -13,6 +13,11 @@
   conditions = {Cookie =["cookie","nf_jwt"]}
 
 [[redirects]]
+  from = "/protected"
+  to = "https://github.programnotes.cn"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/:splat"
   status = 200
