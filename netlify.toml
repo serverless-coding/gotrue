@@ -7,9 +7,21 @@
   GO111MODULE = "on"
 
 [[redirects]]
+  from = "/protected"
+  to = "https://google.programnotes.cn"
+  status = 200
+  conditions = {Cookie =["cookie","nf_jwt"]}
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+# 在这个示例中，to URL 中的 provider 参数设置为 gotrue，表示使用 GoTrue 进行身份验证和授权。
+# redirect_uri 参数设置为你的应用程序的回调 URL，用于接收身份验证和授权的响应。
+# 在重定向到 GoTrue 的 authorize 端点后，用户将被要求登录并授权你的应用程序访问他们的账户信息。
+# 完成身份验证和授权后，用户将被重定向回你的应用程序的回调 URL。
+# 在回调 URL 中，你可以使用 GoTrue 的 API 来获取用户的身份验证令牌，并将其用于后续 API 请求。
 
 [functions]
   # Directory with serverless functions, including background
