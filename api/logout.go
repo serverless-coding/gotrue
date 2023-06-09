@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/netlify/gotrue/models"
@@ -17,13 +18,17 @@ func (a *API) Logout(w http.ResponseWriter, r *http.Request) error {
 	}()
 	ctx := r.Context()
 	instanceID := getInstanceID(ctx)
+	fmt.Println("-------instanceId------")
 
 	a.clearCookieToken(ctx, w)
+
+	fmt.Println("-------cookie------")
 
 	u, err := getUserFromClaims(ctx, a.db)
 	if err != nil {
 		return unauthorizedError("Invalid user").WithInternalError(err)
 	}
+	fmt.Println("-------claims------")
 
 	err = a.db.Transaction(func(tx *storage.Connection) error {
 		if terr := models.NewAuditLogEntry(tx, instanceID, u, models.LogoutAction, nil); terr != nil {

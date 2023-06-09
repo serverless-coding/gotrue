@@ -232,7 +232,7 @@ func (a *API) setCookieToken(config *conf.Configuration, tokenString string, ses
 }
 
 func (a *API) clearCookieToken(ctx context.Context, w http.ResponseWriter) {
-	config := getConfig(ctx)
+	config := a.getConfig(ctx)
 	http.SetCookie(w, &http.Cookie{
 		Name:     config.Cookie.Key,
 		Value:    "",
