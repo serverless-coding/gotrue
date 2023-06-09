@@ -19,4 +19,6 @@ do
 done
 
 
+# yarn build && rm -r www/ && mv dist www
+
 ps -aux | grep "go"

@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <a href="https://github.com/whizjs/netlify-identity-demo-vue">
+    <!-- <a href="https://github.com/whizjs/netlify-identity-demo-vue">
       <img
         style="position: absolute; top: 0; right: 0; border: 0;"
         src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
         alt="Fork me on GitHub"
       >
-    </a>
+    </a> -->
     <img alt="Vue logo" src="./assets/logo.png">
     <h3>Welcome to Netlify Identity Demo in Vue.js</h3>
     <div v-if="isLoggedIn">
@@ -47,7 +47,7 @@ import netlifyIdentity from "netlify-identity-widget";
 import { mapGetters, mapActions } from "vuex";
 
 netlifyIdentity.init({
-  APIUrl: "https://auth-cn.netlify.app/.netlify/functions",
+  APIUrl: "https://auth.programnotes.cn/.netlify/functions",
   logo: true // you can try false and see what happens
 });
 
