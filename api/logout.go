@@ -26,6 +26,7 @@ func (a *API) Logout(w http.ResponseWriter, r *http.Request) error {
 
 	u, err := getUserFromClaims(ctx, a.db)
 	if err != nil {
+		fmt.Println("claims err:", err)
 		return unauthorizedError("Invalid user").WithInternalError(err)
 	}
 	fmt.Println("-------claims------")
