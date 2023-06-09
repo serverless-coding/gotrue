@@ -5,10 +5,16 @@ import (
 
 	"github.com/netlify/gotrue/models"
 	"github.com/netlify/gotrue/storage"
+	"github.com/sirupsen/logrus"
 )
 
 // Logout is the endpoint for logging out a user and thereby revoking any refresh tokens
 func (a *API) Logout(w http.ResponseWriter, r *http.Request) error {
+	defer func() {
+		if r := recover(); r != nil {
+			logrus.Error("panic,err:", r)
+		}
+	}()
 	ctx := r.Context()
 	instanceID := getInstanceID(ctx)
 
