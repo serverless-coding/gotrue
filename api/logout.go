@@ -16,7 +16,14 @@ func (a *API) Logout(w http.ResponseWriter, r *http.Request) error {
 			logrus.Error("panic,err:", r)
 		}
 	}()
-	ctx := r.Context()
+	// TODO:
+	// 获取token,解析出jwt内的数据
+	contextFromReq, err := a.requireAuthentication(w, r)
+	if err != nil {
+		return badRequestError("Could not read claims")
+	}
+	ctx := contextFromReq
+
 	instanceID := getInstanceID(ctx)
 	fmt.Println("-------instanceId------")
 
