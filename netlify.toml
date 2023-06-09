@@ -8,13 +8,13 @@
 
 [[redirects]]
   from = "/protected"
-  to = "https://search-cn.netlify.app/:splat"
+  to = "https://google.programnotes.cn/:splat"
   status = 200
   conditions = {Cookie =["cookie","nf_jwt"]}
 
 [[redirects]]
   from = "/protected"
-  to = "https://github-proxy.netlify.app/:splat"
+  to = "https://github.programnotes.cn/:splat"
   status = 200
 
 [[redirects]]
