@@ -6,7 +6,6 @@ require (
 	github.com/beevik/etree v1.1.1-0.20200718192613-4a2f8b9d084c
 	github.com/didip/tollbooth/v5 v5.1.1
 	github.com/go-chi/chi v4.0.2+incompatible
-	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gobuffalo/pop/v5 v5.3.4
 	github.com/gobuffalo/uuid v2.0.5+incompatible

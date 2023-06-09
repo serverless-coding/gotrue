@@ -3,6 +3,7 @@ go 1.19
 use (
 	.
 	./functions/authorize
+	./functions/logout
 	./functions/setting
 	./functions/settings
 	./functions/signup
