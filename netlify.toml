@@ -11,11 +11,13 @@
   to = "https://google.programnotes.cn/:splat"
   status = 200
   conditions = {Cookie =["cookie","nf_jwt"]}
+  signed = "API_SIGNATURE_TOKEN"
 
 [[redirects]]
   from = "/protected"
   to = "https://github.programnotes.cn/:splat"
   status = 200
+  signed = "API_SIGNATURE_TOKEN"
 
 [[redirects]]
   from = "/*"
