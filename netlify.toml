@@ -20,7 +20,7 @@
 
 [[redirects]]
   from = "/*"
-  to = "https://auth.programnotes.cn/:splat"
+  to = "https://auth.programnotes.cn/"
   signed = "API_SIGNATURE_TOKEN"
   status = 200
 
