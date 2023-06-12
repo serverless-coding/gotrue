@@ -12,26 +12,16 @@
   status = 200
 
 [[redirects]]
-  from = "/protected/*"
+  from = "/*"
   to = "https://google.programnotes.cn/:splat"
   conditions = {Cookie =["cookie","nf_jwt"]}
   signed = "API_SIGNATURE_TOKEN"
   status = 200
 
 [[redirects]]
-  from = "/protected/*"
+  from = "/*"
   to = "https://auth.programnotes.cn/"
   signed = "API_SIGNATURE_TOKEN"
-  status = 200
-
-# [[redirects]]
-#   from = "/*"
-#   to = "/.netlify/functions/:splat"
-#   status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "https://auth.programnotes.cn/:splat"
   status = 200
 
 # 在这个示例中，to URL 中的 provider 参数设置为 gotrue，表示使用 GoTrue 进行身份验证和授权。
