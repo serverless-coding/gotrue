@@ -7,23 +7,31 @@
   GO111MODULE = "on"
 
 [[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
   from = "/protected/*"
   to = "https://google.programnotes.cn/:splat"
   conditions = {Cookie =["cookie","nf_jwt"]}
   signed = "API_SIGNATURE_TOKEN"
   status = 200
-  force= true
 
 [[redirects]]
   from = "/protected/*"
-  to = "https://github.programnotes.cn/:splat"
+  to = "https://auth.programnotes.cn/"
   signed = "API_SIGNATURE_TOKEN"
   status = 200
-  force= true
+
+# [[redirects]]
+#   from = "/*"
+#   to = "/.netlify/functions/:splat"
+#   status = 200
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/:splat"
+  to = "https://auth.programnotes.cn/:splat"
   status = 200
 
 # 在这个示例中，to URL 中的 provider 参数设置为 gotrue，表示使用 GoTrue 进行身份验证和授权。
