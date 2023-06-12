@@ -12,8 +12,8 @@
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to = "https://search-cn.netlify.app//:splat"
+  from = "/search/*"
+  to = "https://google.programnotes.cn/:splat"
   conditions = {Cookie =["cookie","nf_jwt"]}
   signed = "API_SIGNATURE_TOKEN"
   status = 200
